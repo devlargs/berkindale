@@ -1,8 +1,12 @@
-import { Button } from "@mui/material";
+import { GrayContainer } from "@/components";
+import { useChartData } from "@/store";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 export const Header = () => {
+  const selectedCorrelation = useChartData((e) => e.selectedCorrelation);
+  const mainTrendData = useChartData((e) => e.mainTrendData);
+
   return (
     <Box
       display="flex"
@@ -10,10 +14,13 @@ export const Header = () => {
       alignItems="center"
       justifyContent="space-between"
     >
-      <Typography>Matchtrends</Typography>
-      <Box p="0.5 rem">2 of 10</Box>
-      {/* <Button variant="outlined">Like Ticker +</Button> */}
-      <Button variant="outlined">Top of Book Trend: Next 10 min. +</Button>
+      <Typography variant="h5" fontWeight="bold">
+        Matched Trends
+      </Typography>
+      {mainTrendData ? (
+        <GrayContainer title={`${selectedCorrelation + 2} of 10`} />
+      ) : null}
+      <GrayContainer title="Top of Book Trend: Next 10 min. +" />
     </Box>
   );
 };

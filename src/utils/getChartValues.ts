@@ -1,5 +1,5 @@
-import { createCandlestickData } from "@/utils";
 import { DATASET } from "@/constants";
+import { createCandlestickData } from "@/utils";
 
 export const getChartValues = (ticker: string, date: string, time: string) => {
   const trends = DATASET.filter(

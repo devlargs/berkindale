@@ -1,6 +1,6 @@
+import { TickerListProps } from "@/store";
 import dayjs, { Dayjs } from "dayjs";
 import { create } from "zustand";
-import { TickerListProps } from "@/store";
 
 type DateTime = Dayjs | null;
 

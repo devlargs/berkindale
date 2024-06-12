@@ -4,13 +4,7 @@ import {
   SeriesOptionsCommon,
   TimeChartOptions,
 } from "lightweight-charts";
-
-export const COLORS = {
-  danger: "#FF4877",
-  success: "#47f0aa",
-  dark: "#121212",
-  gray: "#1d222a",
-};
+import { COLORS } from "./colors";
 
 export const CHART_OPTIONS: DeepPartial<TimeChartOptions> = {
   layout: {

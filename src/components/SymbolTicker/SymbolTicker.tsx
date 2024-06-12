@@ -1,5 +1,5 @@
 import { useOptions, useTickers } from "@/store";
-import { Box, Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, Box, TextField } from "@mui/material";
 
 export const SymbolTicker = () => {
   const tickerList = useTickers((e) => e.tickerList);

@@ -1,22 +1,24 @@
-import { Inter } from "next/font/google";
-import { ControlPanel, Header } from "@/components";
+import {
+  ControlPanel,
+  GrayContainer,
+  Header,
+  TrendNavigation,
+} from "@/components";
 import { Chart } from "@/components/Chart";
-import { Alert, Box, Button, Typography } from "@mui/material";
-import { useChartData, useOptions } from "@/store";
+import { useChartData } from "@/store";
+import { Alert, Box, Typography } from "@mui/material";
 import { CandlestickData, Time } from "lightweight-charts";
+import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
 const Home = () => {
-  const ticker = useOptions((e) => e.ticker);
   const mainTrendData = useChartData((e) => e.mainTrendData);
   const closestCorrelation = useChartData((e) => e.closestCorrelation);
   const [selectedCorrelation, setSelectedCorrelation] = useChartData((e) => [
     e.selectedCorrelation,
     e.setSelectedCorrelation,
   ]);
-
-  console.log(selectedCorrelation);
 
   return (
     <main className={`${inter.className}`}>
@@ -26,41 +28,25 @@ const Home = () => {
         {mainTrendData && closestCorrelation.length ? (
           <Box flex="1" border="1px solid white">
             <Box p="1rem" display="flex" justifyContent="space-between">
-              <Typography>{ticker?.value}</Typography>
+              <Typography>{mainTrendData.ticker}</Typography>
               <Box display="flex" gap="16px">
                 <Typography>{mainTrendData.from}</Typography>
                 <Typography>to</Typography>
                 <Typography>{mainTrendData.to}</Typography>
               </Box>
             </Box>
+
             <Chart
               data={mainTrendData.candlestickData as CandlestickData<Time>[]}
               id="main-trend"
             />
-            <Box
-              p="1rem"
-              display="flex"
-              justifyContent="space-between"
-              border="1px solid white"
-            >
-              <Button
-                variant="contained"
-                onClick={() => setSelectedCorrelation(selectedCorrelation - 1)}
-              >
-                Previous Trend
-              </Button>
-              <Button
-                variant="contained"
-                onClick={() => setSelectedCorrelation(selectedCorrelation + 1)}
-              >
-                Next Trend
-              </Button>
-            </Box>
+            <TrendNavigation />
+
             <Box p="1rem" display="flex" justifyContent="space-between">
               <Typography>
                 {closestCorrelation[selectedCorrelation].ticker}
               </Typography>
-              <Box display="flex" gap="16px">
+              <Box display="flex" gap="16px" alignItems="center">
                 <Typography>
                   {closestCorrelation[selectedCorrelation].from}
                 </Typography>
@@ -68,10 +54,11 @@ const Home = () => {
                 <Typography>
                   {closestCorrelation[selectedCorrelation].to}
                 </Typography>
-                <Typography>
-                  Correlation ={" "}
-                  {closestCorrelation[selectedCorrelation].correlation}
-                </Typography>
+                <GrayContainer
+                  title={`Correlation = ${closestCorrelation[
+                    selectedCorrelation
+                  ].correlation.toFixed(4)}`}
+                />
               </Box>
             </Box>
             <Chart

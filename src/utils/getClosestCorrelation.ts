@@ -9,8 +9,11 @@ export const getClosestCorrelation = (
 
   diffs.sort((a, b) => a.diff - b.diff);
 
-  return diffs.slice(1, 10).map((obj) => {
-    const { diff, ...originalObj } = obj;
-    return originalObj;
-  });
+  return diffs
+    .slice(1, 10)
+    .map((obj) => {
+      const { diff, ...originalObj } = obj;
+      return originalObj;
+    })
+    .reverse();
 };

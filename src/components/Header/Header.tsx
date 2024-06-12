@@ -12,7 +12,7 @@ export const Header = () => {
     >
       <Typography>Matchtrends</Typography>
       <Box p="0.5 rem">2 of 10</Box>
-      <Button variant="outlined">Like Ticker +</Button>
+      {/* <Button variant="outlined">Like Ticker +</Button> */}
       <Button variant="outlined">Top of Book Trend: Next 10 min. +</Button>
     </Box>
   );

@@ -13,6 +13,7 @@ export const ControlPanel = () => {
   const ticker = useOptions((e) => e.ticker);
   const [isClient, setIsClient] = useState(false);
   const setCandleStickData = useChartData((e) => e.setMainTrendData);
+  const setClosetCorrelation = useChartData((e) => e.setClosestCorrelation);
 
   useEffect(() => {
     // Prevent hydration mismatch
@@ -39,7 +40,7 @@ export const ControlPanel = () => {
       mainTrendData!.correlation,
       DATASET
     );
-    const closetCorrelationCandleStickData = closestCorrelation.map(
+    const closestCorrelationCandleStickData = closestCorrelation.map(
       (q: { symbol: string; timestamp_at: string }) => {
         return getChartValues(
           q.symbol.split(":CC")[0],
@@ -49,6 +50,7 @@ export const ControlPanel = () => {
       }
     );
 
+    setClosetCorrelation(closestCorrelationCandleStickData);
     setCandleStickData(mainTrendData);
   };
 

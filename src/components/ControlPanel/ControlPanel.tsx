@@ -4,7 +4,8 @@ import { SymbolTicker } from "@/components";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import { useChartData, useOptions } from "@/store";
 import { useEffect, useMemo, useState } from "react";
-import { getChartValues } from "@/utils";
+import { getChartValues, getClosestCorrelation } from "@/utils";
+import { DATASET } from "@/constants";
 
 export const ControlPanel = () => {
   const [date, setDate] = useOptions((e) => [e.date, e.setDate]);
@@ -31,6 +32,21 @@ export const ControlPanel = () => {
       selectedTicker,
       selectedDate,
       selectedTime
+    );
+
+    // TODO: typecheck this one better
+    const closestCorrelation: any = getClosestCorrelation(
+      mainTrendData!.correlation,
+      DATASET
+    );
+    const closetCorrelationCandleStickData = closestCorrelation.map(
+      (q: { symbol: string; timestamp_at: string }) => {
+        return getChartValues(
+          q.symbol.split(":CC")[0],
+          q.timestamp_at.split(" ")[0],
+          q.timestamp_at.split(" ")[1]
+        );
+      }
     );
 
     setCandleStickData(mainTrendData);

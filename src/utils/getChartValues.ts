@@ -1,14 +1,16 @@
-import { X1_BEST, X2_BEST } from "@/constants";
-import { createCandlestickData } from "./createCandleStickData";
+import { createCandlestickData } from "@/utils";
+import { DATASET } from "@/constants";
 
 export const getChartValues = (ticker: string, date: string, time: string) => {
-  const x1 = X1_BEST.find(
-    (q) => q.symbol === `${ticker}:CC` && q.timestamp_at.includes(date)
+  const trends = DATASET.filter(
+    (q) =>
+      q.symbol === `${ticker}:CC` &&
+      q.timestamp_at.includes(date) &&
+      q.timestamp_at.includes(time)
   );
-  const x2 = X2_BEST.find((q) => q.symbol === `${ticker}:CC`);
 
-  if (x1 && x2) {
-    return createCandlestickData(x1);
+  if (trends.length) {
+    return createCandlestickData(trends[0]);
   }
 
   return null;

@@ -32,5 +32,7 @@ export const createCandlestickData = (dataObj: any): MainTrendDataProps => {
       DATE_FORMAT
     ),
     candlestickData,
+    correlation: dataObj.corr,
+    ticker: dataObj.symbol.split(":CC")[0],
   };
 };

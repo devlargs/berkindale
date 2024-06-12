@@ -1,56 +1,45 @@
+import {
+  CANDLE_STICKS_SERIES_OPTIONS,
+  CHART_OPTIONS,
+} from "@/constants/chartOptions";
 import { Box } from "@mui/material";
-import { createChart } from "lightweight-charts";
-import { useEffect } from "react";
-import { ControlPanel } from "../ControlPanel";
+import dayjs from "dayjs";
+import { CandlestickData, Time, createChart } from "lightweight-charts";
+import { FC, useEffect } from "react";
 
-const red = "#FF4877";
+type ChartProps = {
+  id: string;
+  data: CandlestickData<Time>[];
+};
 
-export const Chart = () => {
+export const Chart: FC<ChartProps> = ({ id, data }) => {
   useEffect(() => {
-    const chartOptions = {
-      layout: {
-        textColor: "gray",
-        background: { type: "solid", color: "#121212" },
+    const chart = createChart(document.getElementById(id) as HTMLElement, {
+      ...CHART_OPTIONS,
+      localization: {
+        timeFormatter: (time: Date) => dayjs(time).format("HH:mm:ss"),
       },
-      grid: {
-        vertLines: {
-          color: "#1d222a",
-        },
-        horzLines: {
-          color: "#1d222a",
-        },
+      timeScale: {
+        timeVisible: true,
+        secondsVisible: true,
+        tickMarkFormatter: (time: Date) => dayjs(time).format("HH:mm:ss"),
       },
-    };
-    const chart = createChart(
-      document.getElementById("container") as HTMLElement,
-      chartOptions as any
-    );
-    const histogramSeries = chart.addHistogramSeries({ color: "#47f0aa" });
+    });
 
-    const data = [
-      { value: 1, time: 1642425322 },
-      { value: 8, time: 1642511722 },
-      { value: 10, time: 1642598122 },
-      { value: 20, time: 1642684522 },
-      { value: 3, time: 1642770922, color: red },
-      { value: 43, time: 1642857322 },
-      { value: 41, time: 1642943722, color: red },
-      { value: 43, time: 1643030122 },
-      { value: 56, time: 1643116522 },
-      { value: 66, time: 1643202922, color: red },
-    ];
+    const candlestickSeries = chart.addCandlestickSeries({
+      ...CANDLE_STICKS_SERIES_OPTIONS,
+    });
 
-    histogramSeries.setData(data as any);
+    candlestickSeries.setData(data);
 
     chart.timeScale().fitContent();
+    window.addEventListener("resize", () => {
+      chart.resize(
+        document.getElementById(id)?.clientWidth as number,
+        document.getElementById(id)?.clientHeight as number
+      );
+    });
   }, []);
 
-  return (
-    <Box display="flex">
-      <Box height="400px" id="container" width="100%" />
-      <Box width="400px" p="1.5rem">
-        <ControlPanel />
-      </Box>
-    </Box>
-  );
+  return <Box height="400px" id={id} width="100%" />;
 };

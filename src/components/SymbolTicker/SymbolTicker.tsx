@@ -1,45 +1,18 @@
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Box,
-  Autocomplete,
-  TextField,
-} from "@mui/material";
-import Papa from "papaparse";
-import { useEffect, useState } from "react";
-
-type TickerProps = {
-  value: string;
-  label: string;
-};
+import { useOptions, useTickers } from "@/store";
+import { Box, Autocomplete, TextField } from "@mui/material";
 
 export const SymbolTicker = () => {
-  const [ticker, setTicker] = useState<TickerProps[]>([]);
-
-  useEffect(() => {
-    // Assuming this is an api call to get the list of tickers
-    Papa.parse<{ symbol: string }>("/spreadsheets/symbols.csv", {
-      download: true,
-      header: true,
-      complete: function (results) {
-        setTicker(
-          results.data.map((q) => ({
-            label: q.symbol,
-            value: q.symbol,
-          }))
-        );
-      },
-    });
-  }, []);
+  const tickerList = useTickers((e) => e.tickerList);
+  const [ticker, setTicker] = useOptions((e) => [e.ticker, e.setTicker]);
 
   return (
     <Box mt="1rem">
       <Autocomplete
+        isOptionEqualToValue={(option, value) => option?.value === value?.value}
         disablePortal
-        options={ticker}
-        onChange={(_, v) => console.log(v)}
+        options={tickerList}
+        value={ticker}
+        onChange={(_, value) => setTicker(value)}
         renderInput={(params) => <TextField {...params} label="Ticker" />}
       />
     </Box>

@@ -11,8 +11,12 @@ const Home = () => {
   const ticker = useOptions((e) => e.ticker);
   const mainTrendData = useChartData((e) => e.mainTrendData);
   const closestCorrelation = useChartData((e) => e.closestCorrelation);
+  const [selectedCorrelation, setSelectedCorrelation] = useChartData((e) => [
+    e.selectedCorrelation,
+    e.setSelectedCorrelation,
+  ]);
 
-  console.log(closestCorrelation);
+  console.log(selectedCorrelation);
 
   return (
     <main className={`${inter.className}`}>
@@ -39,23 +43,41 @@ const Home = () => {
               justifyContent="space-between"
               border="1px solid white"
             >
-              <Button variant="contained">Previous Trend</Button>
-              <Button variant="contained">Next Trend</Button>
+              <Button
+                variant="contained"
+                onClick={() => setSelectedCorrelation(selectedCorrelation - 1)}
+              >
+                Previous Trend
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => setSelectedCorrelation(selectedCorrelation + 1)}
+              >
+                Next Trend
+              </Button>
             </Box>
             <Box p="1rem" display="flex" justifyContent="space-between">
-              <Typography>{closestCorrelation[0].ticker}</Typography>
+              <Typography>
+                {closestCorrelation[selectedCorrelation].ticker}
+              </Typography>
               <Box display="flex" gap="16px">
-                <Typography>{closestCorrelation[0].from}</Typography>
-                <Typography>to</Typography>
-                <Typography>{closestCorrelation[0].to}</Typography>
                 <Typography>
-                  Correlation = {closestCorrelation[0].correlation}
+                  {closestCorrelation[selectedCorrelation].from}
+                </Typography>
+                <Typography>to</Typography>
+                <Typography>
+                  {closestCorrelation[selectedCorrelation].to}
+                </Typography>
+                <Typography>
+                  Correlation ={" "}
+                  {closestCorrelation[selectedCorrelation].correlation}
                 </Typography>
               </Box>
             </Box>
             <Chart
               data={
-                closestCorrelation[0].candlestickData as CandlestickData<Time>[]
+                closestCorrelation[selectedCorrelation]
+                  .candlestickData as CandlestickData<Time>[]
               }
               id="secondary-trend"
             />

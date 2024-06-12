@@ -41,10 +41,8 @@ export const Chart: FC<ChartProps> = ({ id, data }) => {
       ...CANDLE_STICKS_SERIES_OPTIONS,
     });
 
-    // Fit content to the new data
     chartRef.current.timeScale().fitContent();
 
-    // Handle window resize
     const handleResize = () => {
       if (chartRef.current) {
         chartRef.current.resize(
@@ -59,14 +57,14 @@ export const Chart: FC<ChartProps> = ({ id, data }) => {
       window.removeEventListener("resize", handleResize);
       chartRef.current?.remove();
     };
-  }, [id]); // Initialize the chart on mount and clean up on unmount
+  }, [id]);
 
   useEffect(() => {
     if (seriesRef.current) {
       seriesRef.current.setData(data);
-      chartRef.current?.timeScale().fitContent(); // Ensure the chart fits the new data
+      chartRef.current?.timeScale().fitContent();
     }
-  }, [data]); // Update chart data when the `data` prop changes
+  }, [data]);
 
   return <Box height="400px" id={id} width="100%" />;
 };

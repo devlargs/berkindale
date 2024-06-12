@@ -10,7 +10,12 @@ export const CorrelationChart = () => {
 
   return (
     <>
-      <Box p="1rem" display="flex" justifyContent="space-between">
+      <Box
+        p="1rem"
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Typography>
           {closestCorrelation[selectedCorrelation].ticker}
         </Typography>

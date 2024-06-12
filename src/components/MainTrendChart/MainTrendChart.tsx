@@ -8,7 +8,12 @@ export const MainTrendChart = () => {
 
   return (
     <>
-      <Box p="1rem" display="flex" justifyContent="space-between">
+      <Box
+        p="1rem"
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Typography>{mainTrendData?.ticker}</Typography>
         <Box display="flex" gap="16px">
           <Typography>{mainTrendData?.from}</Typography>

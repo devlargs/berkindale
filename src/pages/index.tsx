@@ -1,73 +1,35 @@
 import {
   ControlPanel,
-  GrayContainer,
+  CorrelationChart,
   Header,
+  MainTrendChart,
   TrendNavigation,
 } from "@/components";
-import { Chart } from "@/components/Chart";
 import { useChartData } from "@/store";
-import { Alert, Box, Typography } from "@mui/material";
-import { CandlestickData, Time } from "lightweight-charts";
+import { Alert, Box } from "@mui/material";
 import { Inter } from "next/font/google";
+import { useMemo } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
 const Home = () => {
   const mainTrendData = useChartData((e) => e.mainTrendData);
   const closestCorrelation = useChartData((e) => e.closestCorrelation);
-  const [selectedCorrelation, setSelectedCorrelation] = useChartData((e) => [
-    e.selectedCorrelation,
-    e.setSelectedCorrelation,
-  ]);
+
+  const showChart = useMemo(() => {
+    return mainTrendData && closestCorrelation.length;
+  }, [mainTrendData, closestCorrelation]);
 
   return (
     <main className={`${inter.className}`}>
       <Header />
 
       <Box display="flex">
-        {mainTrendData && closestCorrelation.length ? (
+        {showChart ? (
           <Box flex="1" border="1px solid white">
-            <Box p="1rem" display="flex" justifyContent="space-between">
-              <Typography>{mainTrendData.ticker}</Typography>
-              <Box display="flex" gap="16px">
-                <Typography>{mainTrendData.from}</Typography>
-                <Typography>to</Typography>
-                <Typography>{mainTrendData.to}</Typography>
-              </Box>
-            </Box>
-
-            <Chart
-              data={mainTrendData.candlestickData as CandlestickData<Time>[]}
-              id="main-trend"
-            />
+            <MainTrendChart />
             <TrendNavigation />
-
-            <Box p="1rem" display="flex" justifyContent="space-between">
-              <Typography>
-                {closestCorrelation[selectedCorrelation].ticker}
-              </Typography>
-              <Box display="flex" gap="16px" alignItems="center">
-                <Typography>
-                  {closestCorrelation[selectedCorrelation].from}
-                </Typography>
-                <Typography>to</Typography>
-                <Typography>
-                  {closestCorrelation[selectedCorrelation].to}
-                </Typography>
-                <GrayContainer
-                  title={`Correlation = ${closestCorrelation[
-                    selectedCorrelation
-                  ].correlation.toFixed(4)}`}
-                />
-              </Box>
-            </Box>
-            <Chart
-              data={
-                closestCorrelation[selectedCorrelation]
-                  .candlestickData as CandlestickData<Time>[]
-              }
-              id="secondary-trend"
-            />
+            <CorrelationChart />
           </Box>
         ) : (
           <Box flex="1" p="1rem">
